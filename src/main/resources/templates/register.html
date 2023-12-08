@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+</head>
+<body>
+<h1>회원 가입</h1>
+<script>
+    async function register()
+    {
+        const username = document.getElementById("userId").value;
+        const password = document.getElementById("password").value;
+        console.log(username + " / " + password);
+        try{
+            const response = await fetch("/api/v1/auth/register", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({userId: username, password: password}),
+
+            });
+
+            if(response.status === 400)
+            {
+                alert("잘못된 값 입력입니다!");
+                window.location.reload();
+            }
+            else if(response.status === 409)
+            {
+                alert("이미 가입되어 있습니다!");
+                window.location.reload();
+            }
+            else if(response.status === 200) {
+                alert("회원 가입 성공! 로그인 페이지로 이동합니다!");
+                location.pathname = "/login"
+            }
+        } catch (error)
+        {
+            console.error('Error:', error);
+        }
+    }
+</script>
+<form onsubmit="register(); return false;" method="post">
+    <label for="userId">아이디</label>
+    <input type="text" id="userId" name="userId" placeholder="ID" style="margin: 3mm;"/>
+    <br/>
+    <label for="password">비밀번호</label>
+    <input type="password" id="password" name="password" placeholder="Password" style="margin: 3mm;"/>
+    <br/>
+    <input type="submit" value="회원 가입 하기" style="margin: 3mm;padding: 2mm"/>
+</form>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>유저 관리 페이지</h1>
+<hr>
+<ul id="list"></ul>
+<script>
+    async function removeUser(userId, successCallback) {
+        await fetch('/api/v1/user/remove', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: userId
+            })
+        }).then(response => {
+            if (response.status === 200) {
+                successCallback();
+            }
+        });
+    }
+    (async  ()=> {
+        const response = await fetch('api/v1/user/list');
+        const result = await response.json();
+        for(let i = 0; i < result.length; i++)
+        {
+            let li=document.createElement("li");
+            let liLabel = document.createTextNode("&nbsp"+result[i]);
+            let deleteUserButton = document.createElement("button");
+            deleteUserButton.innerText = "유저 삭제";
+            deleteUserButton.onclick = function () {
+                removeUser(result[i], ()=>window.location.reload());
+            }
+
+            li.appendChild(deleteUserButton);
+            li.appendChild(liLabel);
+
+            document.getElementById("list").appendChild(li);
+        }
+    })();
+</script>
+</body>
+</html>

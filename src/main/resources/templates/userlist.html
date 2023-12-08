@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>유저 리스트</title>
+</head>
+<body>
+<h1>유저 리스트</h1>
+<hr>
+<ul id="list"></ul>
+<script>
+    (async  ()=> {
+        const response = await fetch('api/v1/user/list');
+        const result = await response.json();
+        for(let i = 0; i < result.length; i++)
+        {
+            let li=document.createElement("li");
+            li.appendChild(document.createTextNode(result[i]));
+            document.getElementById("list").appendChild(li);
+        }
+    })();
+</script>
+</body>
+</html>
